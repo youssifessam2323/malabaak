@@ -1,4 +1,4 @@
-package io.joework.malabaabapi;
+package io.joework.malabaakapi;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;

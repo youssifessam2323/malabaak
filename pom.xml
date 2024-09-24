@@ -9,7 +9,7 @@
 		<relativePath/> <!-- lookup parent from repository -->
 	</parent>
 	<groupId>io.joework</groupId>
-	<artifactId>malabaab-api</artifactId>
+	<artifactId>malabaak-api</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
 	<name>malabaak-api</name>
 	<description>building backend application for Malabaak project</description>

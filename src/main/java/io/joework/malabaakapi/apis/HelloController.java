@@ -1,4 +1,4 @@
-package io.joework.malabaabapi.apis;
+package io.joework.malabaakapi.apis;
 
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
