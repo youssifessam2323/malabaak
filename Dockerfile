@@ -6,17 +6,8 @@ ARG JAR_FILE=target/*.jar
 
 RUN echo "we are running some # of cool thing"
 
-
 # Copy the JAR file from the build context into the Docker image
 COPY ${JAR_FILE} application.jar
-
-# defining the application environment
-ENV DB_HOST=host.docker.internal
-ENV DB_NAME=malabaak
-ENV DB_USER=malabaak
-ENV DB_PASSWORD=mysecretpassword
-ENV SPRING_DATASOURCE_URL=jdbc:postgresql://$DB_HOST:5432/$DB_NAME
-ENV DB_NAME=malabaak
 
 CMD apt-get update -y
 
