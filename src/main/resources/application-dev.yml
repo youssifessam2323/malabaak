@@ -1,8 +1,12 @@
 spring:
   datasource:
-    url: ${DATASOURCE_URL}
+    url: ${DATASOURCE_URL:jdbc:postgresql://localhost:5432/malabaakdb}
     username: ${DB_USER:malabaak}
     password: ${DB_PASSWORD:mysecretpassword}
     driver-class-name: org.postgresql.Driver
   jpa:
     show-sql: on
+
+## setting the change master file for liquibase
+#  liquibase:
+#    change-log: classpath:/db/changelog/db.changelog-master.yaml
