@@ -1,0 +1,18 @@
+databaseChangeLog:
+  - changeSet:
+      id: 1
+      author: youssifessambakry
+      context: dev
+      comment: application initial script for creating the application main tables and relations
+      changes:
+        - sqlFile:
+            path: db/changelog/changes/001-init-script.sql
+
+  - changeSet:
+      id: 2
+      author: youssifessambakry
+      context: dev
+      comment: adding emp table for the demo purpose
+      changes:
+        - sqlFile:
+            path: db/changelog/changes/002-adding-emp-table.sql
