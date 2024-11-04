@@ -1,9 +1,16 @@
 package io.joework.malabaakapi;
 
+import io.joework.malabaakapi.config.security.RSAKeysProperties;
 import org.springframework.boot.SpringApplication;
+import org.springframework.boot.actuate.autoconfigure.security.servlet.ManagementWebSecurityAutoConfiguration;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.boot.autoconfigure.security.servlet.SecurityAutoConfiguration;
+import org.springframework.boot.context.properties.EnableConfigurationProperties;
 
-@SpringBootApplication
+@SpringBootApplication(exclude = {SecurityAutoConfiguration.class, ManagementWebSecurityAutoConfiguration.class})
+@EnableConfigurationProperties(value = {
+		RSAKeysProperties.class
+})
 public class MalabaakApiApplication {
 
 	public static void main(String[] args) {

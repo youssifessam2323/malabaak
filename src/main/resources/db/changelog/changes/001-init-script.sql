@@ -1,6 +1,6 @@
 -- changeset yessam:231321312321
 -- precondition-sql-check expectedResult:0 select count(*) from information_schema where table_name = 'players'
-CREATE TABLE players(
+CREATE TABLE IF NOT EXISTS players(
     id SERIAL PRIMARY KEY,
     first_name VARCHAR(100) NOT NULL,
     last_name VARCHAR(100) NOT NULL,
@@ -13,7 +13,7 @@ CREATE TABLE players(
     is_deleted BOOLEAN DEFAULT FALSE
 );
 
-CREATE TABLE owners(
+CREATE TABLE IF NOT EXISTS owners(
     id SERIAL PRIMARY KEY,
     first_name VARCHAR(100) NOT NULL,
     last_name VARCHAR(100) NOT NULL,
@@ -26,7 +26,7 @@ CREATE TABLE owners(
     is_deleted BOOLEAN DEFAULT FALSE
 );
 
-CREATE TABLE locations(
+CREATE TABLE IF NOT EXISTS locations(
     id serial PRIMARY KEY,
     latitude DOUBLE PRECISION NOT NULL CHECK (latitude BETWEEN -90 AND 90),  -- Latitude must be between -90 and 90
     longitude DOUBLE PRECISION NOT NULL CHECK (longitude BETWEEN -180 AND 180), -- Longitude must be between -180 and 180
@@ -38,7 +38,7 @@ CREATE TABLE locations(
 
 
 
-CREATE TABLE organizations(
+CREATE TABLE IF NOT EXISTS organizations(
     id SERIAL PRIMARY KEY,
     name VARCHAR(100),
     field_reservation_auto_approval BOOLEAN DEFAULT FALSE,
@@ -46,7 +46,7 @@ CREATE TABLE organizations(
     owner_id INT REFERENCES owners(id) ON DELETE CASCADE
 );
 
-CREATE TABLE fields(
+CREATE TABLE IF NOT EXISTS fields(
     id SERIAL PRIMARY KEY,
     name VARCHAR(100),
     size VARCHAR(20),
@@ -56,7 +56,7 @@ CREATE TABLE fields(
     organization_id INT REFERENCES organizations(id) ON DELETE CASCADE
 );
 
-CREATE TABLE reservations(
+CREATE TABLE IF NOT EXISTS reservations(
     id serial PRIMARY KEY,
     status VARCHAR(50),
     date DATE,
@@ -67,7 +67,7 @@ CREATE TABLE reservations(
     field_id INT REFERENCES fields(id)
 );
 
-CREATE TABLE reports(
+CREATE TABLE IF NOT EXISTS reports(
     id SERIAL PRIMARY KEY,
     title VARCHAR(100),
     description TEXT,

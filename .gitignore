@@ -34,5 +34,5 @@ build/
 
 
 ### Environment Files ###
-.env
+env/local/.env
 prod/

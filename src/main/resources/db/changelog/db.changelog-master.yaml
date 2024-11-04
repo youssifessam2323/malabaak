@@ -7,3 +7,21 @@ databaseChangeLog:
       changes:
         - sqlFile:
             path: db/changelog/changes/001-init-script.sql
+
+  - changeSet:
+      id: 2
+      author: youssifessambakry
+      context: dev
+      comment: adding table verification_links to keep track of the link expiration date
+      changes:
+        - sqlFile:
+            path: db/changelog/changes/002-adding-verification-links-table.sql
+
+  - changeSet:
+      id: 3
+      author: youssifessambakry
+      context: dev
+      comment: altering table player, adding new col "role"
+      changes:
+        - sqlFile:
+            path: db/changelog/changes/003-alter-table-player-adding-role-col.sql
