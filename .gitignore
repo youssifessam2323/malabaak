@@ -35,4 +35,7 @@ build/
 
 ### Environment Files ###
 env/local/.env
+env/local/.env
 prod/
+
+*.drawio.*
