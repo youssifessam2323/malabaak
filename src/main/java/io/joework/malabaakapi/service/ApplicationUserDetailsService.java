@@ -1,21 +1,20 @@
 package io.joework.malabaakapi.service;
 
-import io.joework.malabaakapi.repository.PlayerRepository;
+import io.joework.malabaakapi.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
 @Service
 @RequiredArgsConstructor
-public class PlayerUserDetailsService implements UserDetailsService {
+public class ApplicationUserDetailsService implements org.springframework.security.core.userdetails.UserDetailsService {
 
-    private final PlayerRepository playerRepository;
+    private final UserRepository userRepository;
 
     @Override
     public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
-        return playerRepository.findByEmail(email)
+        return userRepository.findByEmail(email)
                 .orElseThrow(() -> new UsernameNotFoundException(email));
     }
 }
