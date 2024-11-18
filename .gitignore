@@ -38,4 +38,6 @@ env/local/.env
 env/local/.env
 prod/
 
+### other dirs ###
 Diagrams/
+certs/
