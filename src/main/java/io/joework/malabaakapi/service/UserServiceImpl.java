@@ -1,8 +1,8 @@
 package io.joework.malabaakapi.service;
 
-import io.joework.malabaakapi.model.Player;
+import io.joework.malabaakapi.model.User;
 import io.joework.malabaakapi.model.VerificationLink;
-import io.joework.malabaakapi.repository.PlayerRepository;
+import io.joework.malabaakapi.repository.UserRepository;
 import io.joework.malabaakapi.repository.VerificationLinkRepository;
 import io.joework.malabaakapi.util.VerificationLinkUtil;
 import lombok.RequiredArgsConstructor;
@@ -14,20 +14,20 @@ import java.util.UUID;
 
 @Service
 @RequiredArgsConstructor
-public class PlayerServiceImpl implements PlayerService {
+public class UserServiceImpl implements UserService {
 
     private final VerificationLinkRepository verificationLinkRepository;
     private final PasswordEncoder passwordEncoder;
-    private final PlayerRepository playerRepository;
+    private final UserRepository userRepository;
 
     @Override
-    public Player savePlayer(Player player) {
-        player.setPassword(passwordEncoder.encode(player.getPassword()));
-        return playerRepository.save(player);
+    public User saveUser(User user) {
+        user.setPassword(passwordEncoder.encode(user.getPassword()));
+        return userRepository.save(user);
     }
 
     @Override
-    public boolean enablePlayer(String token){
+    public boolean enableUser(String token){
 
         Optional<VerificationLink> verificationLinkOptional = verificationLinkRepository.findByVerificationToken(UUID.fromString(token));
         if(verificationLinkOptional.isEmpty()){
@@ -38,14 +38,14 @@ public class PlayerServiceImpl implements PlayerService {
             verificationLinkRepository.delete(verificationLink);
             return false;
         }
-        verificationLink.getPlayer().setIsEnabled(true);
+        verificationLink.getUser().setIsEnabled(true);
         verificationLinkRepository.delete(verificationLink);
         return true;
     }
 
     @Override
-    public Optional<Player> checkPlayerExists(String email) {
-        return playerRepository.findByEmail(email);
+    public Optional<User> checkUserExists(String email) {
+        return userRepository.findByEmail(email);
     }
 
 

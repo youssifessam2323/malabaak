@@ -22,7 +22,7 @@ public class VerificationLink {
 
     @ManyToOne
     @JoinColumn(name = "player_id", nullable = false)
-    private Player player;
+    private User user;
 
     @Column(name = "expired_at")
     private Instant expiredAt;

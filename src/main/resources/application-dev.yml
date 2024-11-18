@@ -20,7 +20,6 @@ spring:
           protocol: smtp
     username: ${APP_MAIL_ACCOUNT}
     host: smtp.gmail.com
-    #          TODO: remove that before pushing to github
     password: ${APP_MAIL_PASSWORD}
     port: '587'
 logging:
@@ -31,10 +30,6 @@ logging:
     org.hibernate.sql: DEBUG
     org.hibernate.type: TRACE
 
-## setting the change master file for liquibase
-#  liquibase:
-
-#    change-log: classpath:/db/changelog/db.changelog-master.yaml
 rsa:
   private-key: classpath:certs/private.pem
   public-key: classpath:certs/public.pem

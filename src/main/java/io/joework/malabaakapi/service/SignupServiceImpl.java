@@ -1,8 +1,8 @@
 package io.joework.malabaakapi.service;
 
 import io.joework.malabaakapi.exception.UserExistsException;
-import io.joework.malabaakapi.mapper.PlayerMapper;
-import io.joework.malabaakapi.model.Player;
+import io.joework.malabaakapi.mapper.UserMapper;
+import io.joework.malabaakapi.model.User;
 import io.joework.malabaakapi.model.config.VerificationLinkConfig;
 import io.joework.malabaakapi.model.dto.SignupRequest;
 import io.joework.malabaakapi.model.dto.SignupResponse;
@@ -24,8 +24,8 @@ import java.util.Map;
 @Slf4j
  public class SignupServiceImpl implements SignupService {
     private static final String VERIFICATION_EMAIL_HTML_TEMPLATE = "verification-email";
-    private final PlayerService playerService;
-    private final PlayerMapper playerMapper;
+    private final UserService userService;
+    private final UserMapper userMapper;
     private final MailService mailService;
     private final EmailTemplateService emailTemplateService;
     private final VerificationService verificationLinkService;
@@ -33,31 +33,31 @@ import java.util.Map;
     @Override
     public SignupResponse signUp(SignupRequest signupRequest, HttpServletRequest request) throws MessagingException {
 
-        Player player = playerMapper.fromSignupRequest(signupRequest, new Player());
-        if(playerExists(player)){
+        User user = userMapper.fromSignupRequest(signupRequest, new User());
+        if(userExists(user)){
             throw new UserExistsException();
         }
-        log.info("creating new Player account: {}", player);
+        log.info("creating new User account: {}", user);
 
-        Player savedPlayer = playerService.savePlayer(player);
+        User savedUser = userService.saveUser(user);
 
-        String mailBody = prepareVerificationEmailBody(request, player, savedPlayer);
-        mailService.send(savedPlayer.getEmail(),"Account Verification", mailBody, true);
+        String mailBody = prepareVerificationEmailBody(request, user, savedUser);
+        mailService.send(savedUser.getEmail(),"Account Verification", mailBody, true);
 
         return SignupResponse.builder()
-                .fullName(savedPlayer.getFirstName() + ' ' + savedPlayer.getLastName())
-                .email(player.getEmail())
-                .role(player.getRole().name())
+                .fullName(savedUser.getFirstName() + ' ' + savedUser.getLastName())
+                .email(user.getEmail())
+                .role(user.getRole().name())
                 .isVerificationRequired(true)
                 .build();
     }
 
-    private String prepareVerificationEmailBody(HttpServletRequest request, Player player, Player savedPlayer) {
+    private String prepareVerificationEmailBody(HttpServletRequest request, User user, User savedUser) {
         String verificationLinkToken =
-                verificationLinkService.createVerificationLink(player, VerificationLinkConfig.builder()
+                verificationLinkService.createVerificationLink(user, VerificationLinkConfig.builder()
                         .expirationTime(Instant.now().plus(24, ChronoUnit.HOURS))
                         .build());
-        String userFullName = savedPlayer.getFirstName() + " " + savedPlayer.getLastName();
+        String userFullName = savedUser.getFirstName() + " " + savedUser.getLastName();
         String verificationUrl = VerificationLinkUtil.createVerificationUrl(verificationLinkToken, request);
         return emailTemplateService.prepareEmailTemplate(VERIFICATION_EMAIL_HTML_TEMPLATE,
                         Map.of(
@@ -65,7 +65,7 @@ import java.util.Map;
                                 "verificationUrl", verificationUrl));
     }
 
-    private boolean playerExists(Player player) {
-        return playerService.checkPlayerExists(player.getEmail()).isPresent();
+    private boolean userExists(User user) {
+        return userService.checkUserExists(user.getEmail()).isPresent();
     }
 }

@@ -25,3 +25,12 @@ databaseChangeLog:
       changes:
         - sqlFile:
             path: db/changelog/changes/003-alter-table-player-adding-role-col.sql
+
+  - changeSet:
+      id: 4
+      author: youssifessambakry
+      context: dev
+      comment: altering table player, rename to user
+      changes:
+        - sqlFile:
+            path: db/changelog/changes/004-renaming-players-table-to-user.sql

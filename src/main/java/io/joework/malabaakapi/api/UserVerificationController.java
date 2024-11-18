@@ -1,6 +1,6 @@
 package io.joework.malabaakapi.api;
 
-import io.joework.malabaakapi.service.PlayerService;
+import io.joework.malabaakapi.service.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -12,11 +12,11 @@ import org.springframework.web.bind.annotation.RequestParam;
 @RequiredArgsConstructor
 public class UserVerificationController {
 
-    private final PlayerService playerService;
+    private final UserService userService;
 
     @GetMapping
     public String verificationPage(@RequestParam(name = "token") String token){
-        boolean isPlayerEnabled = playerService.enablePlayer(token);
-        return isPlayerEnabled ?  "verification-success" : "verification-failed";
+        boolean isUserEnabled = userService.enableUser(token);
+        return isUserEnabled ?  "verification-success" : "verification-failed";
     }
 }

@@ -15,10 +15,10 @@ import java.util.Collection;
 import java.util.List;
 
 @Entity
-@Table(name = "players")
+@Table(name = "users")
 @Setter
 @Getter
-public class Player implements UserDetails {
+public class User implements UserDetails {
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "verification_link_generator")
     @SequenceGenerator(name = "verification_link_generator",sequenceName ="players_id_seq" , initialValue = 1, allocationSize = 1)

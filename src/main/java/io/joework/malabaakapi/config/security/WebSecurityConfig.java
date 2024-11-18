@@ -6,7 +6,7 @@ import com.nimbusds.jose.jwk.RSAKey;
 import com.nimbusds.jose.jwk.source.ImmutableJWKSet;
 import com.nimbusds.jose.jwk.source.JWKSource;
 import com.nimbusds.jose.proc.SecurityContext;
-import io.joework.malabaakapi.service.PlayerUserDetailsService;
+import io.joework.malabaakapi.service.ApplicationUserDetailsService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
@@ -32,7 +32,7 @@ public class WebSecurityConfig {
     private static final String[] PUBLIC_ENDPOINTS = {"/auth/**", "/verify", "/login"};
     private final RSAKeysProperties rsaKeysProperties;
     private final PasswordEncoder passwordEncoder;
-    private final PlayerUserDetailsService playerUserDetailsService;
+    private final ApplicationUserDetailsService applicationUserDetailsService;
 
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
@@ -62,7 +62,7 @@ public class WebSecurityConfig {
 
     @Autowired
     public void configureGlobal(AuthenticationManagerBuilder auth) throws Exception {
-        auth.userDetailsService(playerUserDetailsService).passwordEncoder(passwordEncoder);
+        auth.userDetailsService(applicationUserDetailsService).passwordEncoder(passwordEncoder);
 
     }
 
