@@ -32,6 +32,7 @@ public class AuthController {
             HttpServletRequest request
     ) throws MessagingException {
         String signupSuccessMessage = messagesUtil.getMessage(SIGNUP_SUCCESS_MESSAGE);
+        log.info("message: {}", signupSuccessMessage);
         ApiResponse<SignupResponse> userRegisteredSuccessfully =
                 new ApiResponse<>(HttpStatus.OK.value(),
                         signupSuccessMessage,
