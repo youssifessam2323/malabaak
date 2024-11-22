@@ -16,6 +16,12 @@ public class VerificationServiceImpl implements VerificationService {
 
     private final VerificationLinkRepository verificationLinkRepository;
 
+    /**
+     *
+     * @param user the user that this verification link will be created for
+     * @param verificationLinkConfig verification link configuration
+     * @return verification link created token
+     */
     @Override
     public String createVerificationLink(User user, VerificationLinkConfig verificationLinkConfig) {
         VerificationLink verificationLink = new VerificationLink();
