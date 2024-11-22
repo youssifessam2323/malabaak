@@ -41,7 +41,7 @@ import java.util.Map;
 
         User savedUser = userService.saveUser(user);
 
-        String mailBody = prepareVerificationEmailBody(request, user, savedUser);
+        String mailBody = prepareVerificationEmailBody(request, savedUser);
         mailService.send(savedUser.getEmail(),"Account Verification", mailBody, true);
 
         return SignupResponse.builder()
@@ -52,12 +52,12 @@ import java.util.Map;
                 .build();
     }
 
-    private String prepareVerificationEmailBody(HttpServletRequest request, User user, User savedUser) {
+    private String prepareVerificationEmailBody(HttpServletRequest request, User user) {
         String verificationLinkToken =
                 verificationLinkService.createVerificationLink(user, VerificationLinkConfig.builder()
                         .expirationTime(Instant.now().plus(24, ChronoUnit.HOURS))
                         .build());
-        String userFullName = savedUser.getFirstName() + " " + savedUser.getLastName();
+        String userFullName = user.getFirstName() + " " + user.getLastName();
         String verificationUrl = VerificationLinkUtil.createVerificationUrl(verificationLinkToken, request);
         return emailTemplateService.prepareEmailTemplate(VERIFICATION_EMAIL_HTML_TEMPLATE,
                         Map.of(
