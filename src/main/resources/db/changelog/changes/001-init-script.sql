@@ -1,11 +1,12 @@
--- changeset yessam:231321312321
--- precondition-sql-check expectedResult:0 select count(*) from information_schema where table_name = 'players'
-CREATE TABLE IF NOT EXISTS players(
+
+CREATE TABLE IF NOT EXISTS users
+(
     id SERIAL PRIMARY KEY,
     first_name VARCHAR(100) NOT NULL,
     last_name VARCHAR(100) NOT NULL,
     email VARCHAR(255) NOT NULL,
     password VARCHAR(72) NOT NULL,
+    role VARCHAR(50) NOT NULL DEFAULT 'PLAYER',
     account_provider VARCHAR(30) NOT NULL,
     is_enabled BOOLEAN DEFAULT FALSE,
     created_at TIMESTAMP DEFAULT current_timestamp,
@@ -63,7 +64,7 @@ CREATE TABLE IF NOT EXISTS reservations(
     start_time TIME NOT NULL,
     end_time TIME NOT NULL,
     amount_to_pay NUMERIC(1000,2),
-    player_id INT REFERENCES players(id),
+    user_id INT REFERENCES users (id),
     field_id INT REFERENCES fields(id)
 );
 
@@ -77,4 +78,9 @@ CREATE TABLE IF NOT EXISTS reports(
     reservation_id INT REFERENCES reservations(id)
 );
 
-
+CREATE TABLE if not exists  verification_links (
+   id serial not null primary key,
+   verification_token UUID,
+   expired_at timestamp default current_timestamp,
+   user_id int references users(id) not null
+);

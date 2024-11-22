@@ -1,4 +1,6 @@
 spring:
+  liquibase:
+    contexts: dev
   datasource:
     url: ${DATASOURCE_URL:jdbc:postgresql://localhost:5432/malabaakdb}
     username: ${DB_USER:malabaak}
