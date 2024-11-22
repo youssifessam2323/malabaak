@@ -13,15 +13,14 @@ import java.util.UUID;
 @Getter
 public class VerificationLink {
     @Id
-    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "verification_link_generator")
-    @SequenceGenerator(name = "verification_links_id_seq",sequenceName = "verification_links_id_seq", initialValue = 1, allocationSize = 1)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
 
     @Column(name = "verification_token")
     private UUID verificationToken = UUID.randomUUID();
 
     @ManyToOne
-    @JoinColumn(name = "player_id", nullable = false)
+    @JoinColumn(name = "user_id", nullable = false)
     private User user;
 
     @Column(name = "expired_at")

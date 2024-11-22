@@ -22,7 +22,6 @@ import java.util.List;
 public class User implements UserDetails {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-//    @SequenceGenerator(name = "users_generator",sequenceName ="users_id_seq" , initialValue = 1, allocationSize = 1)
     private Integer id;
 
     @Column(name = "first_name", nullable = false)
