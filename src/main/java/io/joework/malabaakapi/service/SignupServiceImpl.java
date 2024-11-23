@@ -1,6 +1,5 @@
 package io.joework.malabaakapi.service;
 
-import io.joework.malabaakapi.exception.UserExistsException;
 import io.joework.malabaakapi.mapper.UserMapper;
 import io.joework.malabaakapi.model.User;
 import io.joework.malabaakapi.model.config.VerificationLinkConfig;
@@ -29,16 +28,11 @@ import java.util.Map;
     private final MailService mailService;
     private final EmailTemplateService emailTemplateService;
     private final VerificationService verificationLinkService;
-
+    private final HttpServletRequest request;
     @Override
-    public SignupResponse signUp(SignupRequest signupRequest, HttpServletRequest request) throws MessagingException {
+    public SignupResponse signUp(SignupRequest signupRequest) throws MessagingException {
 
         User user = userMapper.fromSignupRequest(signupRequest, new User());
-        if(userExists(user)){
-            throw new UserExistsException();
-        }
-        log.info("creating new User account: {}", user);
-
         User savedUser = userService.saveUser(user);
 
         String mailBody = prepareVerificationEmailBody(request, savedUser);
@@ -65,7 +59,4 @@ import java.util.Map;
                                 "verificationUrl", verificationUrl));
     }
 
-    private boolean userExists(User user) {
-        return userService.checkUserExists(user.getEmail()).isPresent();
-    }
 }

@@ -28,15 +28,14 @@ public class AuthController {
 
     @PostMapping("/signup")
     public ResponseEntity<ApiResponse<SignupResponse>> signup(
-            @RequestBody @Valid SignupRequest signupRequest,
-            HttpServletRequest request
+            @RequestBody @Valid SignupRequest signupRequest
     ) throws MessagingException {
         String signupSuccessMessage = messagesUtil.getMessage(SIGNUP_SUCCESS_MESSAGE);
         log.info("message: {}", signupSuccessMessage);
         ApiResponse<SignupResponse> userRegisteredSuccessfully =
                 new ApiResponse<>(HttpStatus.OK.value(),
                         signupSuccessMessage,
-                        signupService.signUp(signupRequest, request));
+                        signupService.signUp(signupRequest));
         return ResponseEntity.status(HttpStatus.OK).body(userRegisteredSuccessfully);
     }
 }
