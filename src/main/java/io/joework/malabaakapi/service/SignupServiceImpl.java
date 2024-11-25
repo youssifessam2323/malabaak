@@ -32,7 +32,7 @@ import java.util.Map;
     @Override
     public SignupResponse signUp(SignupRequest signupRequest) throws MessagingException {
 
-        User user = userMapper.fromSignupRequest(signupRequest, new User());
+        User user = userMapper.fromSignupRequest(signupRequest);
         User savedUser = userService.saveUser(user);
 
         String mailBody = prepareVerificationEmailBody(request, savedUser);

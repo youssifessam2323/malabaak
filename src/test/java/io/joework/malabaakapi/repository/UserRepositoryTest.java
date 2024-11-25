@@ -4,6 +4,7 @@ import io.joework.malabaakapi.config.security.password.PasswordConfig;
 import io.joework.malabaakapi.model.User;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
+import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.ImportAutoConfiguration;
@@ -17,6 +18,7 @@ import static io.joework.malabaakapi.fixtures.UserFixture.getUserEntityNewRecord
 import static org.junit.jupiter.api.Assertions.*;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
+@Tag("integration")
 @DataJpaTest(properties = "spring.main.web-application-type=servlet")
 @ImportAutoConfiguration(classes = {SecurityAutoConfiguration.class, PasswordConfig.class})
 class UserRepositoryTest {
@@ -36,7 +38,7 @@ class UserRepositoryTest {
 
     @Test
     @DisplayName("Test1: testing save user")
-    void testSaveUser(){
+    void testSaveAndRetrieveUser(){
         User savedUser = classUnderTest.save(user);
 
         Optional<User> byEmail = classUnderTest.findByEmail(user.getEmail());

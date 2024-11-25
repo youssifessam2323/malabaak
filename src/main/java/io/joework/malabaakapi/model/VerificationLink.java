@@ -1,7 +1,9 @@
 package io.joework.malabaakapi.model;
 
 import jakarta.persistence.*;
+import lombok.AllArgsConstructor;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import java.time.Instant;
@@ -11,6 +13,8 @@ import java.util.UUID;
 @Table(name = "verification_links")
 @Setter
 @Getter
+@NoArgsConstructor
+@AllArgsConstructor
 public class VerificationLink {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

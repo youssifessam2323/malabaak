@@ -9,5 +9,5 @@ import org.mapstruct.*;
         unmappedTargetPolicy = ReportingPolicy.IGNORE
         )
 public interface UserMapper {
-        User fromSignupRequest(SignupRequest signupRequest, @MappingTarget User user);
+        User fromSignupRequest(SignupRequest signupRequest);
 }
