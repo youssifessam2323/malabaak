@@ -1,4 +1,4 @@
-package io.joework.malabaakapi.service.mail;
+package io.joework.malabaakapi.service;
 
 import jakarta.mail.MessagingException;
 import jakarta.mail.internet.MimeMessage;

@@ -26,6 +26,7 @@ spring:
     port: '587'
 logging:
   level:
+    io.joework: DEBUG
     web: DEBUG
     org.springframework.security: DEBUG
     org.springframework.mail: DEBUG
@@ -35,3 +36,9 @@ logging:
 rsa:
   private-key: classpath:certs/private.pem
   public-key: classpath:certs/public.pem
+
+
+app:
+  hostname: localhost
+  verification:
+    baseUrl: "http://${app.hostname}:${server.port}"

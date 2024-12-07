@@ -6,7 +6,6 @@ import io.joework.malabaakapi.model.dto.SignupResponse;
 import io.joework.malabaakapi.service.SignupService;
 import io.joework.malabaakapi.util.MessagesUtil;
 import jakarta.mail.MessagingException;
-import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;

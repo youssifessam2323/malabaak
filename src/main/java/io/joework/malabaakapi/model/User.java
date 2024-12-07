@@ -16,7 +16,6 @@ import java.util.List;
 @Table(name = "users")
 @Setter
 @Getter
-@Builder
 @NoArgsConstructor
 @AllArgsConstructor
 public class User implements UserDetails {
@@ -100,12 +99,13 @@ public class User implements UserDetails {
 
     @Override
     public String toString() {
-        return "Player{" +
+        return "User{" +
                 "id=" + id +
                 ", firstName='" + firstName + '\'' +
                 ", lastName='" + lastName + '\'' +
                 ", email='" + email + '\'' +
                 ", password='" + password + '\'' +
+                ", role=" + role +
                 ", accountProvider=" + accountProvider +
                 ", isBlocked=" + isBlocked +
                 ", isEnabled=" + isEnabled +
