@@ -1,7 +1,6 @@
 package io.joework.malabaakapi.util;
 
 import io.joework.malabaakapi.model.VerificationLink;
-import jakarta.servlet.http.HttpServletRequest;
 
 import java.time.Instant;
 import java.util.UUID;
@@ -18,7 +17,7 @@ public class VerificationLinkUtil {
         return baseUrl + "/verify?token=" + token;
     }
 
-    public static boolean checkIfLinkExpired(VerificationLink verificationLink) {
+    public static boolean isLinkExpired(VerificationLink verificationLink) {
         return Instant.now().compareTo(verificationLink.getExpiredAt() ) < 0;
     }
 }

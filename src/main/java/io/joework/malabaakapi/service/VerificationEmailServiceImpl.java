@@ -24,6 +24,7 @@ import java.util.UUID;
 public class VerificationEmailServiceImpl implements VerificationMailService {
 
     private static final String VERIFICATION_EMAIL_HTML_TEMPLATE = "verification-email";
+    public static final String EMAIL_VERIFICATION_SUB = "Account Verification";
 
 
     private final EmailTemplateService emailTemplateService;
@@ -32,7 +33,7 @@ public class VerificationEmailServiceImpl implements VerificationMailService {
     private final VerificationLinkRepository verificationLinkRepository;
 
     @Override
-    public void sendVerificationEmail(User user, VerificationLinkConfig verificationLinkConfig) throws MessagingException {
+    public void sendVerificationEmail(User user, VerificationLinkConfig verificationLinkConfig) {
         log.debug("creating verification token...");
         String verificationLinkToken =
                 createVerificationLink(user, verificationLinkConfig);
@@ -46,7 +47,11 @@ public class VerificationEmailServiceImpl implements VerificationMailService {
                         "verificationUrl", verificationUrl));
 
         log.debug("sending the email...");
-        mailService.send(user.getEmail(),"Account Verification", mailBody, true);
+        try {
+            mailService.send(user.getEmail(), EMAIL_VERIFICATION_SUB, mailBody, true);
+        }catch (MessagingException e) {
+            log.info("an error occurred while sending verification email...");
+        }
     }
 
     /**

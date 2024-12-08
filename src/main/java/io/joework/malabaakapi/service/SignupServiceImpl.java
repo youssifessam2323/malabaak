@@ -6,7 +6,6 @@ import io.joework.malabaakapi.model.config.ExpirationTime;
 import io.joework.malabaakapi.model.config.VerificationLinkConfig;
 import io.joework.malabaakapi.model.dto.SignupRequest;
 import io.joework.malabaakapi.model.dto.SignupResponse;
-import jakarta.mail.MessagingException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -22,10 +21,10 @@ import java.time.temporal.ChronoUnit;
     private final VerificationMailService verificationMailService;
 
     @Override
-    public SignupResponse signUp(SignupRequest signupRequest) throws MessagingException {
+    public SignupResponse signUp(SignupRequest signupRequest) {
 
         User user = userMapper.fromSignupRequest(signupRequest);
-        User savedUser = userService.saveUser(user);
+        User savedUser = userService.save(user);
 
 
         VerificationLinkConfig verificationLinkConfig = VerificationLinkConfig.builder()

@@ -5,5 +5,5 @@ import io.joework.malabaakapi.model.dto.SignupResponse;
 import jakarta.mail.MessagingException;
 
 public interface SignupService {
-    SignupResponse signUp(SignupRequest signupRequest) throws MessagingException;
+    SignupResponse signUp(SignupRequest signupRequest);
 }
