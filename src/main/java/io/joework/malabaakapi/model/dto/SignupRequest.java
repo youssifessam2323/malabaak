@@ -29,7 +29,7 @@ public class SignupRequest {
     @JsonProperty("email")
     private String email;
 
-    @ComplexPassword
+    @ComplexPassword()
     @JsonProperty("password")
     private String password;
 }

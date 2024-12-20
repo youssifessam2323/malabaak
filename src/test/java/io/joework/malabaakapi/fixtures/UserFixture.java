@@ -17,4 +17,12 @@ public class UserFixture {
         return jsonParserByFile(JsonTypes.DTO, "SIGNUP_REQUEST_VALID_JSON", SignupRequest.class);
     }
 
+    public static SignupRequest getInValidSignupRequest() {
+        return jsonParserByFile(JsonTypes.DTO, "SIGNUP_REQUEST_INVALID_JSON", SignupRequest.class);
+    }
+
+    public static SignupRequest getSignupRequestWithInValidPassword() {
+        return jsonParserByFile(JsonTypes.DTO, "SIGNUP_REQUEST_INVALID_PASSWORD", SignupRequest.class);
+    }
+
 }
