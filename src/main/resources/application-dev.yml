@@ -42,3 +42,6 @@ app:
   hostname: localhost
   verification:
     baseUrl: "http://${app.hostname}:${server.port}"
+
+server:
+  port: 8082
