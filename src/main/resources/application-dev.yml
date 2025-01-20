@@ -1,4 +1,6 @@
 spring:
+  liquibase:
+    contexts: dev
   datasource:
     url: ${DATASOURCE_URL:jdbc:postgresql://localhost:5432/malabaakdb}
     username: ${DB_USER:malabaak}
@@ -6,7 +8,40 @@ spring:
     driver-class-name: org.postgresql.Driver
   jpa:
     show-sql: on
+    hibernate:
+      ddl-auto: validate
+  mail:
+    properties:
+      mail:
+        smtp:
+          starttls:
+            enable: 'true'
+            required: 'true'
+          auth: 'true'
+        transport:
+          protocol: smtp
+    username: ${APP_MAIL_ACCOUNT}
+    host: smtp.gmail.com
+    password: ${APP_MAIL_PASSWORD}
+    port: '587'
+logging:
+  level:
+    io.joework: DEBUG
+    web: DEBUG
+    org.springframework.security: DEBUG
+    org.springframework.mail: DEBUG
+    org.hibernate.sql: DEBUG
+    org.hibernate.type: TRACE
 
-## setting the change master file for liquibase
-#  liquibase:
-#    change-log: classpath:/db/changelog/db.changelog-master.yaml
+rsa:
+  private-key: classpath:certs/private.pem
+  public-key: classpath:certs/public.pem
+
+
+app:
+  hostname: localhost
+  verification:
+    baseUrl: "http://${app.hostname}:${server.port}"
+
+server:
+  port: 8082

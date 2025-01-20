@@ -1,6 +1,20 @@
--- changeset yessam:231321312321
--- precondition-sql-check expectedResult:0 select count(*) from information_schema where table_name = 'players'
-CREATE TABLE players(
+
+CREATE TABLE IF NOT EXISTS users
+(
+    id SERIAL PRIMARY KEY,
+    first_name VARCHAR(100) NOT NULL,
+    last_name VARCHAR(100) NOT NULL,
+    email VARCHAR(255) NOT NULL,
+    password VARCHAR(72) NOT NULL,
+    role VARCHAR(50) NOT NULL DEFAULT 'PLAYER',
+    account_provider VARCHAR(30) NOT NULL,
+    is_enabled BOOLEAN DEFAULT FALSE,
+    created_at TIMESTAMP DEFAULT current_timestamp,
+    is_blocked BOOLEAN DEFAULT FALSE,
+    is_deleted BOOLEAN DEFAULT FALSE
+);
+
+CREATE TABLE IF NOT EXISTS owners(
     id SERIAL PRIMARY KEY,
     first_name VARCHAR(100) NOT NULL,
     last_name VARCHAR(100) NOT NULL,
@@ -13,20 +27,7 @@ CREATE TABLE players(
     is_deleted BOOLEAN DEFAULT FALSE
 );
 
-CREATE TABLE owners(
-    id SERIAL PRIMARY KEY,
-    first_name VARCHAR(100) NOT NULL,
-    last_name VARCHAR(100) NOT NULL,
-    email VARCHAR(255) NOT NULL,
-    password VARCHAR(72) NOT NULL,
-    account_provider VARCHAR(30) NOT NULL,
-    is_enabled BOOLEAN DEFAULT FALSE,
-    created_at TIMESTAMP DEFAULT current_timestamp,
-    is_blocked BOOLEAN DEFAULT FALSE,
-    is_deleted BOOLEAN DEFAULT FALSE
-);
-
-CREATE TABLE locations(
+CREATE TABLE IF NOT EXISTS locations(
     id serial PRIMARY KEY,
     latitude DOUBLE PRECISION NOT NULL CHECK (latitude BETWEEN -90 AND 90),  -- Latitude must be between -90 and 90
     longitude DOUBLE PRECISION NOT NULL CHECK (longitude BETWEEN -180 AND 180), -- Longitude must be between -180 and 180
@@ -38,7 +39,7 @@ CREATE TABLE locations(
 
 
 
-CREATE TABLE organizations(
+CREATE TABLE IF NOT EXISTS organizations(
     id SERIAL PRIMARY KEY,
     name VARCHAR(100),
     field_reservation_auto_approval BOOLEAN DEFAULT FALSE,
@@ -46,7 +47,7 @@ CREATE TABLE organizations(
     owner_id INT REFERENCES owners(id) ON DELETE CASCADE
 );
 
-CREATE TABLE fields(
+CREATE TABLE IF NOT EXISTS fields(
     id SERIAL PRIMARY KEY,
     name VARCHAR(100),
     size VARCHAR(20),
@@ -56,18 +57,18 @@ CREATE TABLE fields(
     organization_id INT REFERENCES organizations(id) ON DELETE CASCADE
 );
 
-CREATE TABLE reservations(
+CREATE TABLE IF NOT EXISTS reservations(
     id serial PRIMARY KEY,
     status VARCHAR(50),
     date DATE,
     start_time TIME NOT NULL,
     end_time TIME NOT NULL,
     amount_to_pay NUMERIC(1000,2),
-    player_id INT REFERENCES players(id),
+    user_id INT REFERENCES users (id),
     field_id INT REFERENCES fields(id)
 );
 
-CREATE TABLE reports(
+CREATE TABLE IF NOT EXISTS reports(
     id SERIAL PRIMARY KEY,
     title VARCHAR(100),
     description TEXT,
@@ -77,4 +78,9 @@ CREATE TABLE reports(
     reservation_id INT REFERENCES reservations(id)
 );
 
-
+CREATE TABLE if not exists  verification_links (
+   id serial not null primary key,
+   verification_token UUID,
+   expired_at timestamp default current_timestamp,
+   user_id int references users(id) not null
+);
