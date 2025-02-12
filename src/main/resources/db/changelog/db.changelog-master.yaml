@@ -7,3 +7,13 @@ databaseChangeLog:
       changes:
         - sqlFile:
             path: db/changelog/changes/001-init-script.sql
+
+  - changeSet:
+      id: 2
+      author: youssifessambakry
+      context: dev
+      comment: adding table for the refresh tokens
+      changes:
+        - sqlFile:
+            path: db/changelog/changes/002-add-refresh-token-tbl.sql
+
