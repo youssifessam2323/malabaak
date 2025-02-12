@@ -24,14 +24,24 @@ spring:
     host: smtp.gmail.com
     password: ${APP_MAIL_PASSWORD}
     port: '587'
+  security:
+    oauth2:
+      client:
+        registration:
+          google:
+            client-id: 536122725413-vj2dr5q9ebhs4j5q9jljtpq74s30siaa.apps.googleusercontent.com
+            client-secret: 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
+            scope: openid, profile, email
 logging:
   level:
     io.joework: DEBUG
-    web: DEBUG
-    org.springframework.security: DEBUG
-    org.springframework.mail: DEBUG
-    org.hibernate.sql: DEBUG
-    org.hibernate.type: TRACE
+    org:
+      springframework:
+        web: DEBUG
+        security: TRACE
+        mail: DEBUG
+      hibernate:
+        sql: DEBUG
 
 rsa:
   private-key: classpath:certs/private.pem
@@ -44,4 +54,10 @@ app:
     baseUrl: "http://${app.hostname}:${server.port}"
 
 server:
-  port: 8082
+  port: 8080
+
+token:
+  access-token-config:
+    expiry-time-in-seconds: 3600
+  refresh-token-config:
+    expiry-time-in-seconds: 86400

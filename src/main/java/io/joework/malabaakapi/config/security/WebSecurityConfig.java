@@ -13,6 +13,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
+import org.springframework.core.Ordered;
+import org.springframework.core.annotation.Order;
 import org.springframework.security.config.Customizer;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
@@ -23,7 +25,11 @@ import org.springframework.security.oauth2.jwt.JwtDecoder;
 import org.springframework.security.oauth2.jwt.JwtEncoder;
 import org.springframework.security.oauth2.jwt.NimbusJwtDecoder;
 import org.springframework.security.oauth2.jwt.NimbusJwtEncoder;
+import org.springframework.security.oauth2.server.resource.web.BearerTokenAuthenticationEntryPoint;
+import org.springframework.security.oauth2.server.resource.web.access.BearerTokenAccessDeniedHandler;
 import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.security.web.authentication.www.BasicAuthenticationFilter;
+import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
 
 import static org.springframework.security.config.http.SessionCreationPolicy.STATELESS;
 
@@ -34,20 +40,42 @@ import static org.springframework.security.config.http.SessionCreationPolicy.STA
 public class WebSecurityConfig {
 
     private static final String[] PUBLIC_ENDPOINTS = {"/auth/**", "/verify", "/login"};
+    private static final String TOKEN_ENDPOINT = "/auth/token";
     private final RSAKeysProperties rsaKeysProperties;
     private final PasswordEncoder passwordEncoder;
     private final ApplicationUserDetailsService applicationUserDetailsService;
+    private final CustomBasicAuthEntryPoint customBasicAuthEntryPoint;
+    private final CustomJwtTokenAuthenticationEntryPoint customJwtTokenAuthenticationEntryPoint;
+
 
     @Bean
-    public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
+    public SecurityFilterChain defaultSecurityFilterChain(HttpSecurity http) throws Exception {
         return http
                 .csrf(AbstractHttpConfigurer::disable)
-                .authorizeHttpRequests(authConfig ->
-                        authConfig.requestMatchers(PUBLIC_ENDPOINTS).permitAll()
-                                .anyRequest().authenticated())
-                .oauth2ResourceServer(oauth2 -> oauth2.jwt(Customizer.withDefaults()))
+                .authorizeHttpRequests(auth -> auth.requestMatchers(PUBLIC_ENDPOINTS).permitAll()
+                        .anyRequest().authenticated())
+                .sessionManagement(session -> session.sessionCreationPolicy(STATELESS))
+                .oauth2ResourceServer(config -> config.authenticationEntryPoint(customJwtTokenAuthenticationEntryPoint)
+                        .jwt(Customizer.withDefaults()))
+                .exceptionHandling(
+                        (ex) -> ex.authenticationEntryPoint(new BearerTokenAuthenticationEntryPoint())
+                                .accessDeniedHandler(new BearerTokenAccessDeniedHandler()))
+                .build();
+    }
+
+    @Bean
+    @Order(Ordered.HIGHEST_PRECEDENCE)
+    public SecurityFilterChain tokenSecurityFilterChain(HttpSecurity http) throws Exception {
+        return http
+                .securityMatcher(new AntPathRequestMatcher(TOKEN_ENDPOINT))
+                .authorizeHttpRequests(auth -> auth.anyRequest().authenticated())
                 .sessionManagement(sessionManagementConfigurer -> sessionManagementConfigurer.sessionCreationPolicy(STATELESS))
-                .httpBasic(Customizer.withDefaults())
+                .csrf(AbstractHttpConfigurer::disable)
+                .exceptionHandling(ex ->
+                        ex.authenticationEntryPoint(new BearerTokenAuthenticationEntryPoint())
+                                .accessDeniedHandler(new BearerTokenAccessDeniedHandler())
+                )
+                .httpBasic(config -> config.authenticationEntryPoint(customBasicAuthEntryPoint))
                 .build();
     }
 
@@ -69,6 +97,4 @@ public class WebSecurityConfig {
         auth.userDetailsService(applicationUserDetailsService).passwordEncoder(passwordEncoder);
 
     }
-
-
 }

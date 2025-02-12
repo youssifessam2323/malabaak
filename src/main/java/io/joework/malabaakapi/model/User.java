@@ -4,6 +4,7 @@ import jakarta.persistence.*;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotEmpty;
 import lombok.*;
+import lombok.experimental.Accessors;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -35,7 +36,7 @@ public class User implements UserDetails {
     @Email(message = "must be valid email format.")
     private String email;
 
-    @Column(name = "password", nullable = false)
+    @Column(name = "password", nullable = true)
     private String password;
 
     @Enumerated(EnumType.STRING)
@@ -52,6 +53,7 @@ public class User implements UserDetails {
     private Boolean isEnabled = Boolean.FALSE;
 
     @Column(name = "is_deleted")
+    @Accessors(fluent = true) // used to update the getter method from getIsDeleted to isDeleted
     private Boolean isDeleted = Boolean.FALSE;
 
     @Column(name = "created_at")
