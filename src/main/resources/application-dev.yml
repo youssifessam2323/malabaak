@@ -29,9 +29,9 @@ spring:
       client:
         registration:
           google:
-            client-id: 536122725413-vj2dr5q9ebhs4j5q9jljtpq74s30siaa.apps.googleusercontent.com
-            client-secret: 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
-            scope: openid, profile, email
+            client-id: ${SECURITY_0AUTH_GOOGLE_CLIENT_ID}
+            client-secret: ${SECURITY_0AUTH_GOOGLE_CLIENT_SECRET}
+            scope: ${SECURITY_0AUTH_GOOGLE_SCOPES}
 logging:
   level:
     io.joework: DEBUG
