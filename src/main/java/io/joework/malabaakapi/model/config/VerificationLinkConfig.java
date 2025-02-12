@@ -10,5 +10,5 @@ import java.time.Instant;
 @Getter
 @Builder
 public class VerificationLinkConfig {
-    private Instant expirationTime;
+    private ExpirationTime expirationTime;
 }

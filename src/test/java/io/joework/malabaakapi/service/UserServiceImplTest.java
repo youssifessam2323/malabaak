@@ -8,6 +8,8 @@ import io.joework.malabaakapi.repository.VerificationLinkRepository;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.NullSource;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
@@ -47,43 +49,45 @@ class UserServiceImplTest {
     }
 
     @Test
-    void saveUserSuccessfully() {
+    void testSaveUser_shouldSaveUserSuccessfully_WhenUserIsValid() {
         when(passwordEncoder.encode(any(String.class))).thenReturn("password");
         when(userRepository.save(user)).thenReturn(user);
 
-        classUnderTest.saveUser(user);
+        classUnderTest.save(user);
 
         verify(userRepository, times(1)).save(user);
 
     }
 
     @Test
-    void testSavingExistingUser(){
+    void testSaveUser_ShouldThrowException_WhenUserIsExists(){
         when(userRepository.findByEmail(user.getEmail())).thenReturn(Optional.of(user));
 
-        assertThrows(UserExistsException.class, () -> classUnderTest.saveUser(user));
+        assertThrows(UserExistsException.class, () -> classUnderTest.save(user));
         verify(userRepository, never()).save(user);
     }
 
-    @Test
-    void testNullUser(){
-        assertThrows(IllegalArgumentException.class, () -> classUnderTest.saveUser(null));
-        verify(userRepository, never()).save(null);
+    @NullSource
+    @ParameterizedTest
+    void testEnableUser_shouldThrowIllegalArgumentException_WhenNullUser(User user){
+        assertThrows(IllegalArgumentException.class, () -> classUnderTest.save(user));
+        verify(userRepository, never()).save(user);
     }
 
 
     @Test
-    void testEnableUserWithAValidVerificationLink() {
-        VerificationLink verificationLink = new VerificationLink(0, UUID.randomUUID(), user, Instant.now().plus(10, ChronoUnit.MINUTES));
+    void testEnableUser_shouldEnableUser_WhenHaveAValidVerificationLink() {
+        VerificationLink verificationLink =
+                new VerificationLink(0, UUID.randomUUID(), user, Instant.now().plus(10, ChronoUnit.MINUTES));
         when(verificationLinkRepository.findByVerificationToken(any(UUID.class))).thenReturn(Optional.of(verificationLink));
 
         boolean isEnabled = classUnderTest.enableUser(VERIFICATION_UUID);
         assertTrue(isEnabled);
-        assertEquals(user.getIsEnabled(), isEnabled);
+        assertTrue(user.getIsEnabled());
     }
 
     @Test
-    void testEnableUserWhenTokenIsExpired(){
+    void testEnableUser_shouldNotEnableUser_WhenTokenIsExpired(){
         VerificationLink verificationLink = new VerificationLink(0, UUID.randomUUID(), user,
                 Instant.now().minus(20, ChronoUnit.MINUTES)
                 .plus(10, ChronoUnit.MINUTES));
@@ -98,7 +102,7 @@ class UserServiceImplTest {
     }
 
     @Test
-    void testEnableUserWhenTokenNotFound(){
+    void testEnableUser_shouldNotEnableUser_WhenTokenNotFound(){
 
         when(verificationLinkRepository.findByVerificationToken(any(UUID.class))).thenReturn(Optional.empty());
 
@@ -109,13 +113,14 @@ class UserServiceImplTest {
         assertFalse(user.getIsEnabled());
     }
 
-    @Test
-    void testEnableUserWhenTokenIsNull(){
-        assertThrows(IllegalArgumentException.class,() -> classUnderTest.enableUser(null));
+    @NullSource
+    @ParameterizedTest
+    void testEnableUser_shouldThrowException_WhenTokenIsNull(String token){
+        assertThrows(IllegalArgumentException.class,() -> classUnderTest.enableUser(token));
     }
 
     @Test
-    void testCheckUserExistsWhenValidEmail() {
+    void testCheckUserExists_ShouldReturnOptionOfUser_WhenValidEmail() {
         when(userRepository.findByEmail(user.getEmail())).thenReturn(Optional.of(user));
 
         Optional<User> resultUser = classUnderTest.checkUserExists(user.getEmail());
@@ -125,7 +130,7 @@ class UserServiceImplTest {
     }
 
     @Test
-    void testCheckUserExistsWhenInValidEmail() {
+    void testCheckUserExists_ShouldReturnOptionalOfEmpty_WhenInValidEmail() {
         when(userRepository.findByEmail(user.getEmail())).thenReturn(Optional.empty());
 
         Optional<User> resultUser = classUnderTest.checkUserExists(user.getEmail());
@@ -134,7 +139,7 @@ class UserServiceImplTest {
     }
 
     @Test
-    void testCheckUserExistsWhenNullEmail() {
+    void testCheckUserExists_ShouldThrowIllegalArgumentException_WhenNullEmail() {
         when(userRepository.findByEmail(null)).thenThrow(IllegalArgumentException.class);
         assertThrows(IllegalArgumentException.class,() -> classUnderTest.checkUserExists(null));
     }

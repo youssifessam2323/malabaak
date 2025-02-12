@@ -24,21 +24,32 @@ public class UserServiceImpl implements UserService {
     private final PasswordEncoder passwordEncoder;
     private final UserRepository userRepository;
 
+    /**
+     *
+     * @param user the new user that need to be created
+     * @return the new created user
+     */
     @Override
-    public User saveUser(User user) {
+    public User save(User user) {
         if(Objects.isNull(user)){
             throw new IllegalArgumentException("user is null");
         }
 
-        if(checkUserExists(user.getEmail()).isPresent()){
+        if(checkUserExists(user.getEmail()).isPresent()) {
             log.info("user already exists");
-            throw new UserExistsException();
+            throw new UserExistsException("user already exists");
         }
+
         log.info("creating new User account: {}", user);
         user.setPassword(passwordEncoder.encode(user.getPassword()));
         return userRepository.save(user);
     }
 
+    /**
+     *
+     * @param token: the token that was sent to the user to be verified
+     * @return true if the user is enabled
+     */
     @Override
     public boolean enableUser(String token){
         if(Objects.isNull(token)){
@@ -49,7 +60,7 @@ public class UserServiceImpl implements UserService {
             return false;
         }
         VerificationLink verificationLink = verificationLinkOptional.get();
-        if(!VerificationLinkUtil.checkIfLinkExpired(verificationLink)){
+        if(!VerificationLinkUtil.isLinkExpired(verificationLink)){
             verificationLinkRepository.delete(verificationLink);
             return false;
         }
@@ -58,6 +69,11 @@ public class UserServiceImpl implements UserService {
         return true;
     }
 
+    /**
+     *
+     * @param email user's email
+     * @return an optional of the result
+     */
     @Override
     public Optional<User> checkUserExists(String email) {
         return userRepository.findByEmail(email);

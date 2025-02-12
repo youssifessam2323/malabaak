@@ -2,6 +2,8 @@ package io.joework.malabaakapi.repository;
 
 import io.joework.malabaakapi.config.security.password.PasswordConfig;
 import io.joework.malabaakapi.model.User;
+import jakarta.persistence.EntityManager;
+import jakarta.persistence.PersistenceException;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Tag;
@@ -10,6 +12,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.ImportAutoConfiguration;
 import org.springframework.boot.autoconfigure.security.servlet.SecurityAutoConfiguration;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
+import org.springframework.data.jpa.repository.support.SimpleJpaRepository;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
 import java.util.Optional;
@@ -17,6 +20,7 @@ import java.util.Optional;
 import static io.joework.malabaakapi.fixtures.UserFixture.getUserEntityNewRecord;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.mockito.Mockito.when;
 
 @Tag("integration")
 @DataJpaTest(properties = "spring.main.web-application-type=servlet")
@@ -28,6 +32,9 @@ class UserRepositoryTest {
 
     @Autowired
     private PasswordEncoder passwordEncoder;
+
+    @Autowired
+    private EntityManager entityManager;
 
     private static final User user = getUserEntityNewRecord();
 
@@ -48,5 +55,4 @@ class UserRepositoryTest {
         assertEquals(savedUser.getLastName(), byEmail.get().getLastName());
         assertEquals(savedUser.getPassword(), byEmail.get().getPassword());
     }
-
 }

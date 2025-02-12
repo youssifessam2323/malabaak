@@ -1,7 +1,6 @@
 package io.joework.malabaakapi.util;
 
 import io.joework.malabaakapi.model.VerificationLink;
-import jakarta.servlet.http.HttpServletRequest;
 
 import java.time.Instant;
 import java.util.UUID;
@@ -14,12 +13,11 @@ public class VerificationLinkUtil {
         return UUID.randomUUID();
     }
 
-    public static String createVerificationUrl(String token, HttpServletRequest request) {
-        String appUrl = request.getScheme() + "://" + request.getServerName() + ":" + request.getServerPort();
-        return appUrl + "/verify?token=" + token;
+    public static String createVerificationUrl(String baseUrl, String token) {
+        return baseUrl + "/verify?token=" + token;
     }
 
-    public static boolean checkIfLinkExpired(VerificationLink verificationLink) {
+    public static boolean isLinkExpired(VerificationLink verificationLink) {
         return Instant.now().compareTo(verificationLink.getExpiredAt() ) < 0;
     }
 }

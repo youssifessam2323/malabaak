@@ -1,4 +1,4 @@
-package io.joework.malabaakapi.service.mail;
+package io.joework.malabaakapi.service;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -15,6 +15,10 @@ public class EmailTemplateServiceImpl implements EmailTemplateService {
 
     @Override
     public String prepareEmailTemplate(String templateName, Map<String, Object> contextVariables) {
+        if(templateName == null || templateName.isEmpty()){
+            throw new IllegalArgumentException("template cannot be null or empty");
+
+        }
         Context context = new Context();
         context.setVariables(contextVariables);
 
